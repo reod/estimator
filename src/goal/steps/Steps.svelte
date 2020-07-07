@@ -8,7 +8,6 @@
 <style>
   .steps {
     display: flex;
-    width: 800px;
   }
 
   .steps > :global(*) {

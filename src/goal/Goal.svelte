@@ -2,6 +2,7 @@
   import { goal } from "./store.js";
   import GoalOverview from "./goal-overview/GoalOverview.svelte";
   import Steps from "./steps/Steps.svelte";
+  import StepEditor from "./step-editor/StepEditor.svelte";
 
   let newStep = {
     id: null,
@@ -10,31 +11,17 @@
   };
 
   let currentStep = { ...newStep };
+
+  const handleStepSave = () => {
+    currentStep.id ? goal.updateStep(currentStep) : goal.addStep(currentStep);
+    currentStep = { ...newStep };
+  };
 </script>
 
 <div>
   <GoalOverview />
 
-  <p>
-    name
-    <input bind:value={currentStep.name} />
-  </p>
-  <p>
-    value
-    <input bind:value={currentStep.estimate.value} />
-  </p>
-  <p>
-    reference
-    <input bind:value={currentStep.estimate.referenceStep} />
-
-  </p>
-  <button
-    on:click={() => {
-      currentStep.id ? goal.updateStep(currentStep) : goal.addStep(currentStep);
-      currentStep = { ...newStep };
-    }}>
-    {currentStep.id ? 'edit' : 'add'} step
-  </button>
+  <StepEditor step={currentStep} onSave={handleStepSave} />
 
   <Steps
     onSelectStep={step => {
