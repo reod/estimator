@@ -16,6 +16,10 @@
     currentStep.id ? goal.updateStep(currentStep) : goal.addStep(currentStep);
     currentStep = { ...newStep };
   };
+
+  goal.subscribe(v => {
+      localStorage.setItem('goal', JSON.stringify(v));
+  });
 </script>
 
 <div>

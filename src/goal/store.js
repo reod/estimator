@@ -1,12 +1,14 @@
 import { writable, get } from "svelte/store";
 
-function createGoal(initialSteps) {
-  const initialGoal = {
-    id: 1,
-    name: "paint a room",
-    unit: "min",
-    steps: [...initialSteps],
-  };
+const goalTemplate = {
+  id: 1,
+  name: "paint a room",
+  unit: "min",
+  steps: [],
+};
+
+function createGoal(initialGoal) {
+  initialGoal = initialGoal || goalTemplate;
 
   const goalStore = writable({
     ...initialGoal,
@@ -14,7 +16,8 @@ function createGoal(initialSteps) {
 
   const { subscribe, set, update } = goalStore;
 
-  let id = initialSteps[initialSteps.length - 1].id;
+  const lastStep = initialGoal.steps[initialGoal.steps.length - 1];
+  let id = lastStep ? lastStep.id : 1;
 
   return {
     subscribe,
@@ -46,33 +49,4 @@ function createGoal(initialSteps) {
   };
 }
 
-export const goal = createGoal([
-  {
-    id: 1,
-    name: "pick color",
-    estimate: { value: 1, referenceStep: null },
-  },
-
-  {
-    id: 2,
-    name: "buy stuff",
-    estimate: { value: 2, referenceStep: 1 },
-  },
-
-  {
-    id: 3,
-    name: "change dress",
-    estimate: { value: 1, referenceStep: 2 },
-  },
-
-  {
-    id: 4,
-    name: "paint",
-    estimate: { value: 3, referenceStep: 2 },
-  },
-  {
-    id: 5,
-    name: "clenup",
-    estimate: { value: 1, referenceStep: 1 },
-  },
-]);
+export const goal = createGoal(JSON.parse(localStorage.getItem("goal")));
